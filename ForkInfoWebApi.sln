@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForkInfoWebApi", "ForkInfoWebApi\ForkInfoWebApi.csproj", "{89B561E0-F7F6-49AE-9966-9D8491C0F27F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89B561E0-F7F6-49AE-9966-9D8491C0F27F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89B561E0-F7F6-49AE-9966-9D8491C0F27F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89B561E0-F7F6-49AE-9966-9D8491C0F27F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89B561E0-F7F6-49AE-9966-9D8491C0F27F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AD8E21C5-C6F2-44BD-BA17-7D74F9266A51}
+	EndGlobalSection
+EndGlobal
