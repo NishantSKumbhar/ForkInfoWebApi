@@ -1,6 +1,7 @@
 ﻿using ForkInfoWebApi.Data;
 using ForkInfoWebApi.Models.Domain;
 using ForkInfoWebApi.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace ForkInfoWebApi.Repositories.Implementation
 {
@@ -21,6 +22,12 @@ namespace ForkInfoWebApi.Repositories.Implementation
 
 
             return category;
+        }
+
+        public async Task<IEnumerable<Category>> GetAllAsync()
+        {
+            return await dbContext.Categories.ToListAsync();
+            
         }
     }
 }

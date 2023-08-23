@@ -18,11 +18,24 @@ namespace ForkInfoWebApi.Controllers
             this.categoryRepository = categoryRepository;
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<List<CategorySendDTO>>> GetAllCategories()
-        //{
+        [HttpGet]
+        public async Task<ActionResult<List<CategorySendDTO>>> GetAllCategories()
+        {
+            var categories = await categoryRepository.GetAllAsync();
 
-        //}
+            var categoriesSend = new List<CategorySendDTO>();
+            foreach (var category in categories)
+            {
+                categoriesSend.Add(new CategorySendDTO
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    UrlHandle = category.UrlHandle
+                });
+            }
+
+            return Ok(categoriesSend);
+        }
 
         [HttpPost]
         public async Task<ActionResult<CategorySendDTO>> PostCategory(CategoryGetDTO category)
