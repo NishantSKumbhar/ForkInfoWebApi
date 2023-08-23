@@ -24,10 +24,42 @@ namespace ForkInfoWebApi.Repositories.Implementation
             return category;
         }
 
+       
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
             return await dbContext.Categories.ToListAsync();
             
         }
+
+        public async Task<Category?> GetById(Guid id)
+        {
+            return await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Category?> UpdateAsync(Category category)
+        {
+            var Samplecategory = await dbContext.Categories.FirstOrDefaultAsync(x => x.Id == category.Id);
+            if(Samplecategory != null)
+            {
+                dbContext.Entry(Samplecategory).CurrentValues.SetValues(category);
+                await dbContext.SaveChangesAsync();
+                return category;
+            }
+            return null;
+        }
+
+        public async Task<Category?> DeleteAsync(Guid id)
+        {
+            var existingCategory = await dbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            if(existingCategory != null)
+            {
+                dbContext.Categories.Remove(existingCategory);
+                await dbContext.SaveChangesAsync();
+                return existingCategory;
+            }
+
+            return null;
+        }
+
     }
 }

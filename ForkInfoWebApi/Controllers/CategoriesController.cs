@@ -37,6 +37,43 @@ namespace ForkInfoWebApi.Controllers
             return Ok(categoriesSend);
         }
 
+        [HttpGet("{id}")]
+        
+        public async Task<ActionResult<CategorySendDTO>> GetCategoryById([FromRoute] Guid id)
+        {
+            var category = await categoryRepository.GetById(id);
+            if(category is null)
+            {
+                return NotFound();
+            }
+            var response = new CategorySendDTO { Id = category.Id,Name = category.Name, UrlHandle= category.UrlHandle };
+            return Ok(response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCategory([FromRoute] Guid id, CategoryGetDTO categoryGet)
+        {
+            var category = new Category
+            {
+                Id = id,
+                Name = categoryGet.Name,
+                UrlHandle = categoryGet.UrlHandle
+            };
+
+            category = await categoryRepository.UpdateAsync(category);
+
+            if(category != null)
+            {
+                var response = new CategorySendDTO
+                {
+                    Name = category.Name,
+                    UrlHandle = category.UrlHandle
+                };
+                return Ok(response);
+            }
+            return NotFound();
+        }
+
         [HttpPost]
         public async Task<ActionResult<CategorySendDTO>> PostCategory(CategoryGetDTO category)
         {
@@ -58,6 +95,25 @@ namespace ForkInfoWebApi.Controllers
             };
 
             return Ok(categorySend);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<CategorySendDTO>> DeleteCategory([FromRoute] Guid id)
+        {
+           var category = await categoryRepository.DeleteAsync(id);
+            if(category != null )
+            {
+
+                var response = new CategorySendDTO
+                {
+                    Name = category.Name,
+                    UrlHandle = category.UrlHandle
+                };
+
+                return Ok(response);
+            }
+
+            return NotFound();
         }
     }
 }
