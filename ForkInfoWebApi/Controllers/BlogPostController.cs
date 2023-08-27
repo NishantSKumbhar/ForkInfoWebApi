@@ -1,12 +1,15 @@
 ﻿using ForkInfoWebApi.Models.Domain;
 using ForkInfoWebApi.Models.DTO;
+using ForkInfoWebApi.Repositories.Implementation;
 using ForkInfoWebApi.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForkInfoWebApi.Controllers
 {
     [Route("api/[controller]")]
+    //[AllowAnonymous]
     [ApiController]
     public class BlogPostController : ControllerBase
     {
@@ -47,6 +50,30 @@ namespace ForkInfoWebApi.Controllers
                 Author = result.Author
             };
             return Ok(response);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<BlogPostSendDTO>>> GetBlogPosts()
+        {
+            var blogs = await blogPostRepository.GetBlogPosts();
+
+            var blogpostSend = new List<BlogPostSendDTO>();
+            foreach (var blog in blogs)
+            {
+                blogpostSend.Add(new BlogPostSendDTO
+                {
+                    Id = blog.Id,
+                    Title = blog.Title,
+                    UrlHandle = blog.UrlHandle,
+                    ShortDescription= blog.ShortDescription,
+                    PublishedDate= blog.PublishedDate,
+                    FeaturedImageUrl = blog.FeaturedImageUrl,
+                    IsVisible= blog.IsVisible,
+                    Content = blog.Content
+                });
+            }
+
+            return Ok(blogpostSend);
         }
     }
 }

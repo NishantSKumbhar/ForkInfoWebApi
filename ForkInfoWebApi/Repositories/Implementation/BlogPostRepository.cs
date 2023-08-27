@@ -1,6 +1,7 @@
 ﻿using ForkInfoWebApi.Data;
 using ForkInfoWebApi.Models.Domain;
 using ForkInfoWebApi.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace ForkInfoWebApi.Repositories.Implementation
 {
@@ -18,6 +19,11 @@ namespace ForkInfoWebApi.Repositories.Implementation
             await this.applicationDbContext.SaveChangesAsync();
 
             return blogPost;
+        }
+
+        public async Task<IEnumerable<BlogPost>> GetBlogPosts()
+        {
+            return await this.applicationDbContext.BlogPosts.ToListAsync();
         }
     }
 }
