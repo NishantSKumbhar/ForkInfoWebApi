@@ -21,7 +21,7 @@ namespace ForkInfoWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBlogPost([FromBody] BlogPostGetDTO request)
+        public async Task<IActionResult> CreateBlogPost(BlogPostGetDTO request)
         {
             var blog = new BlogPost
             {
@@ -65,10 +65,10 @@ namespace ForkInfoWebApi.Controllers
                     Id = blog.Id,
                     Title = blog.Title,
                     UrlHandle = blog.UrlHandle,
-                    ShortDescription= blog.ShortDescription,
-                    PublishedDate= blog.PublishedDate,
+                    ShortDescription = blog.ShortDescription,
+                    PublishedDate = blog.PublishedDate,
                     FeaturedImageUrl = blog.FeaturedImageUrl,
-                    IsVisible= blog.IsVisible,
+                    IsVisible = blog.IsVisible,
                     Content = blog.Content
                 });
             }
