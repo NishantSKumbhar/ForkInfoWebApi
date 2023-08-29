@@ -23,7 +23,7 @@ namespace ForkInfoWebApi.Repositories.Implementation
 
         public async Task<IEnumerable<BlogPost>> GetBlogPosts()
         {
-            return await this.applicationDbContext.BlogPosts.ToListAsync();
+            return await this.applicationDbContext.BlogPosts.Include(x => x.Categories).ToListAsync();
         }
     }
 }

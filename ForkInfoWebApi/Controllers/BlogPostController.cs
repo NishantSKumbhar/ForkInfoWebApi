@@ -4,6 +4,7 @@ using ForkInfoWebApi.Repositories.Implementation;
 using ForkInfoWebApi.Repositories.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForkInfoWebApi.Controllers
@@ -14,10 +15,12 @@ namespace ForkInfoWebApi.Controllers
     public class BlogPostController : ControllerBase
     {
         private readonly IBlogPostRepository blogPostRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public BlogPostController(IBlogPostRepository blogPostRepository)
+        public BlogPostController(IBlogPostRepository blogPostRepository, ICategoryRepository categoryRepository)
         {
             this.blogPostRepository = blogPostRepository;
+            this.categoryRepository = categoryRepository;
         }
 
         [HttpPost]
@@ -32,8 +35,18 @@ namespace ForkInfoWebApi.Controllers
                 IsVisible = request.IsVisible,
                 UrlHandle = request.UrlHandle,
                 ShortDescription= request.ShortDescription,
-                PublishedDate= request.PublishedDate
+                PublishedDate= request.PublishedDate,
+                Categories = new List<Category>()
             };
+
+            foreach (var categoryGuid in request.Categories)
+            {
+                var existingCategory = await categoryRepository.GetById(categoryGuid);
+                if(existingCategory is not null)
+                {
+                    blog.Categories.Add(existingCategory);
+                }
+            }
 
             var result = await this.blogPostRepository.CreateAsync(blog);
 
@@ -47,7 +60,13 @@ namespace ForkInfoWebApi.Controllers
                 FeaturedImageUrl = result.FeaturedImageUrl,
                 IsVisible= result.IsVisible,
                 UrlHandle = result.UrlHandle,
-                Author = result.Author
+                Author = result.Author,
+                Categories = result.Categories.Select(x => new CategorySendDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle= x.UrlHandle
+                }).ToList()
             };
             return Ok(response);
         }
@@ -69,7 +88,13 @@ namespace ForkInfoWebApi.Controllers
                     PublishedDate = blog.PublishedDate,
                     FeaturedImageUrl = blog.FeaturedImageUrl,
                     IsVisible = blog.IsVisible,
-                    Content = blog.Content
+                    Content = blog.Content,
+                    Categories = blog.Categories.Select(x => new CategorySendDTO
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        UrlHandle = x.UrlHandle
+                    }).ToList()
                 });
             }
 
