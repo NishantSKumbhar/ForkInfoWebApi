@@ -25,5 +25,24 @@ namespace ForkInfoWebApi.Repositories.Implementation
         {
             return await this.applicationDbContext.BlogPosts.Include(x => x.Categories).ToListAsync();
         }
+
+        public async Task<BlogPost?> GetByIdAsync(Guid id)
+        {
+            return await this.applicationDbContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id);
+            
+        }
+
+        public async Task<BlogPost?> UpdateAsync(Guid id, BlogPost blogPost)
+        {
+            var blog = await this.applicationDbContext.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(x => x.Id == id);
+            if(blog == null)
+            {
+                return null;
+            }
+            applicationDbContext.Entry(blog).CurrentValues.SetValues(blogPost);
+            blog.Categories = blogPost.Categories;
+            await applicationDbContext.SaveChangesAsync();
+            return blog;
+        }
     }
 }

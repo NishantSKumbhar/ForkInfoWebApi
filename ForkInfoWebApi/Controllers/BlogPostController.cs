@@ -1,4 +1,5 @@
-﻿using ForkInfoWebApi.Models.Domain;
+﻿using Azure.Core;
+using ForkInfoWebApi.Models.Domain;
 using ForkInfoWebApi.Models.DTO;
 using ForkInfoWebApi.Repositories.Implementation;
 using ForkInfoWebApi.Repositories.Interface;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata;
 
 namespace ForkInfoWebApi.Controllers
 {
@@ -99,6 +101,86 @@ namespace ForkInfoWebApi.Controllers
             }
 
             return Ok(blogpostSend);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<BlogPostSendDTO>> GetBlogPostById([FromRoute] Guid id )
+        {
+            var blogpost = await blogPostRepository.GetByIdAsync(id);
+            if(blogpost == null)
+            {
+                return NotFound();
+            }
+            var response = new BlogPostSendDTO
+            {
+                Id=blogpost.Id,
+                Title = blogpost.Title,
+                UrlHandle = blogpost.UrlHandle,
+                ShortDescription = blogpost.ShortDescription,
+                PublishedDate = blogpost.PublishedDate,
+                FeaturedImageUrl= blogpost.FeaturedImageUrl,
+                IsVisible = blogpost.IsVisible,
+                Content = blogpost.Content,
+                Categories = blogpost.Categories.Select(x => new CategorySendDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+                }).ToList()
+            };
+
+            return Ok(response);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBlogPost([FromRoute] Guid id, [FromBody] BlogPostGetDTO request)
+        {
+            var blogpost = new BlogPost
+            {
+                Id = id,
+                Title = request.Title,
+                Author = request.Author,
+                FeaturedImageUrl = request.FeaturedImageUrl,
+                Content = request.Content,
+                IsVisible = request.IsVisible,
+                UrlHandle = request.UrlHandle,
+                ShortDescription = request.ShortDescription,
+                PublishedDate = request.PublishedDate,
+                Categories = new List<Category>()
+            };
+
+            foreach (var categoryGuid in request.Categories)
+            {
+                var existingCategory = await categoryRepository.GetById(categoryGuid);
+                if(existingCategory != null)
+                {
+                    blogpost.Categories.Add(existingCategory);
+                }
+
+            }
+            var updatedBlogPost = await this.blogPostRepository.UpdateAsync(id, blogpost);
+            if(updatedBlogPost == null)
+            {
+                return NotFound();
+            }
+            var response = new BlogPostSendDTO
+            {
+                Id = updatedBlogPost.Id,
+                Title = updatedBlogPost.Title,
+                UrlHandle = updatedBlogPost.UrlHandle,
+                ShortDescription = updatedBlogPost.ShortDescription,
+                PublishedDate = updatedBlogPost.PublishedDate,
+                FeaturedImageUrl = updatedBlogPost.FeaturedImageUrl,
+                IsVisible = updatedBlogPost.IsVisible,
+                Content = updatedBlogPost.Content,
+                Categories = updatedBlogPost.Categories.Select(x => new CategorySendDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+                }).ToList()
+            };
+            return Ok(response);
         }
     }
 }
