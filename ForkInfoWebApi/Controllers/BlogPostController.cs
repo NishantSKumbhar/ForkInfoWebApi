@@ -86,6 +86,7 @@ namespace ForkInfoWebApi.Controllers
                     Id = blog.Id,
                     Title = blog.Title,
                     UrlHandle = blog.UrlHandle,
+                    Author = blog.Author,
                     ShortDescription = blog.ShortDescription,
                     PublishedDate = blog.PublishedDate,
                     FeaturedImageUrl = blog.FeaturedImageUrl,
@@ -116,6 +117,7 @@ namespace ForkInfoWebApi.Controllers
                 Id=blogpost.Id,
                 Title = blogpost.Title,
                 UrlHandle = blogpost.UrlHandle,
+                Author = blogpost.Author,
                 ShortDescription = blogpost.ShortDescription,
                 PublishedDate = blogpost.PublishedDate,
                 FeaturedImageUrl= blogpost.FeaturedImageUrl,
@@ -167,6 +169,7 @@ namespace ForkInfoWebApi.Controllers
             {
                 Id = updatedBlogPost.Id,
                 Title = updatedBlogPost.Title,
+                Author = updatedBlogPost.Author,
                 UrlHandle = updatedBlogPost.UrlHandle,
                 ShortDescription = updatedBlogPost.ShortDescription,
                 PublishedDate = updatedBlogPost.PublishedDate,
