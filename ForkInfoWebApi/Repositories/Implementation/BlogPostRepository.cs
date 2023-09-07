@@ -21,6 +21,18 @@ namespace ForkInfoWebApi.Repositories.Implementation
             return blogPost;
         }
 
+        public async Task<BlogPost?> DeleteAsync(Guid id)
+        {
+            var existingBlogPost = await applicationDbContext.BlogPosts.FirstOrDefaultAsync(x => x.Id ==id);
+            if (existingBlogPost != null)
+            {
+                applicationDbContext.BlogPosts.Remove(existingBlogPost);
+                await applicationDbContext.SaveChangesAsync();
+                return existingBlogPost;
+            }
+            return null;
+        }
+
         public async Task<IEnumerable<BlogPost>> GetBlogPosts()
         {
             return await this.applicationDbContext.BlogPosts.Include(x => x.Categories).ToListAsync();

@@ -8,5 +8,6 @@ namespace ForkInfoWebApi.Repositories.Interface
         Task<BlogPost?> GetByIdAsync(Guid id);
         Task<IEnumerable<BlogPost>> GetBlogPosts();
         Task<BlogPost?> UpdateAsync(Guid id, BlogPost blogPost);
+        Task<BlogPost?> DeleteAsync(Guid id);
     }
 }

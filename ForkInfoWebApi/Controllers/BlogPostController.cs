@@ -185,5 +185,31 @@ namespace ForkInfoWebApi.Controllers
             };
             return Ok(response);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
+        {
+            var deletedBlogPost = await this.blogPostRepository.DeleteAsync(id);
+            if(deletedBlogPost == null)
+            {
+                return NotFound();
+            }
+
+            var response = new BlogPostSendDTO
+            {
+                Id = deletedBlogPost.Id,
+                Title = deletedBlogPost.Title,
+                Author = deletedBlogPost.Author,
+                UrlHandle = deletedBlogPost.UrlHandle,
+                ShortDescription = deletedBlogPost.ShortDescription,
+                PublishedDate = deletedBlogPost.PublishedDate,
+                FeaturedImageUrl = deletedBlogPost.FeaturedImageUrl,
+                IsVisible = deletedBlogPost.IsVisible,
+                Content = deletedBlogPost.Content
+            };
+
+            return Ok(response  );
+        }
+
     }
 }
