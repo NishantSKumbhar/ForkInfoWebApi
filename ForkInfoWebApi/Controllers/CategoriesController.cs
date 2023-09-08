@@ -2,6 +2,7 @@
 using ForkInfoWebApi.Models.Domain;
 using ForkInfoWebApi.Models.DTO;
 using ForkInfoWebApi.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ namespace ForkInfoWebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<CategorySendDTO>>> GetAllCategories()
         {
             var categories = await categoryRepository.GetAllAsync();

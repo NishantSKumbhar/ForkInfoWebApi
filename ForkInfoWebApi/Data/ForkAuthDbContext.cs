@@ -6,7 +6,7 @@ namespace ForkInfoWebApi.Data
 {
     public class ForkAuthDbContext: IdentityDbContext
     {
-        public ForkAuthDbContext(DbContextOptions dbContextOptions): base(dbContextOptions)
+        public ForkAuthDbContext(DbContextOptions<ForkAuthDbContext> dbContextOptions): base(dbContextOptions)
         {
 
            
@@ -68,6 +68,8 @@ namespace ForkInfoWebApi.Data
                     RoleId = writerRoleID
                 }
             };
+
+            builder.Entity<IdentityUserRole<string>>().HasData(adminRoles);
         }
 
     }
