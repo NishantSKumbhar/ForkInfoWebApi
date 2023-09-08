@@ -134,6 +134,36 @@ namespace ForkInfoWebApi.Controllers
             return Ok(response);
         }
 
+        [HttpGet("{urlHandle}/byUrlHandle")]
+        public async Task<IActionResult> GetBlogPostByUrlHandle([FromRoute] string urlHandle)
+        {
+            var blogpost = await blogPostRepository.GetByUrlHandleAsync(urlHandle);
+            if (blogpost == null)
+            {
+                return NotFound();
+            }
+            var response = new BlogPostSendDTO
+            {
+                Id = blogpost.Id,
+                Title = blogpost.Title,
+                UrlHandle = blogpost.UrlHandle,
+                Author = blogpost.Author,
+                ShortDescription = blogpost.ShortDescription,
+                PublishedDate = blogpost.PublishedDate,
+                FeaturedImageUrl = blogpost.FeaturedImageUrl,
+                IsVisible = blogpost.IsVisible,
+                Content = blogpost.Content,
+                Categories = blogpost.Categories.Select(x => new CategorySendDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle
+                }).ToList()
+            };
+
+            return Ok(response);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBlogPost([FromRoute] Guid id, [FromBody] BlogPostGetDTO request)
         {
