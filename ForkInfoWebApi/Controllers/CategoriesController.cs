@@ -20,7 +20,7 @@ namespace ForkInfoWebApi.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        
         public async Task<ActionResult<List<CategorySendDTO>>> GetAllCategories()
         {
             var categories = await categoryRepository.GetAllAsync();
@@ -53,6 +53,7 @@ namespace ForkInfoWebApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> PutCategory([FromRoute] Guid id, CategoryGetDTO categoryGet)
         {
             var category = new Category
@@ -68,6 +69,7 @@ namespace ForkInfoWebApi.Controllers
             {
                 var response = new CategorySendDTO
                 {
+                    Id= category.Id,
                     Name = category.Name,
                     UrlHandle = category.UrlHandle
                 };
@@ -77,6 +79,7 @@ namespace ForkInfoWebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult<CategorySendDTO>> PostCategory(CategoryGetDTO category)
         {
             var Newcategory = new Category
@@ -100,6 +103,7 @@ namespace ForkInfoWebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult<CategorySendDTO>> DeleteCategory([FromRoute] Guid id)
         {
            var category = await categoryRepository.DeleteAsync(id);
@@ -108,6 +112,7 @@ namespace ForkInfoWebApi.Controllers
 
                 var response = new CategorySendDTO
                 {
+                    Id = category.Id,
                     Name = category.Name,
                     UrlHandle = category.UrlHandle
                 };

@@ -26,6 +26,7 @@ namespace ForkInfoWebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateBlogPost(BlogPostGetDTO request)
         {
             var blog = new BlogPost
@@ -165,6 +166,7 @@ namespace ForkInfoWebApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateBlogPost([FromRoute] Guid id, [FromBody] BlogPostGetDTO request)
         {
             var blogpost = new BlogPost
@@ -217,6 +219,7 @@ namespace ForkInfoWebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteBlogPost([FromRoute] Guid id)
         {
             var deletedBlogPost = await this.blogPostRepository.DeleteAsync(id);
